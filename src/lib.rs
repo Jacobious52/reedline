@@ -218,8 +218,8 @@ pub use styled_text::StyledText;
 
 mod completion;
 pub use completion::{
-    CircularCompletionHandler, Completer, CompletionActionHandler, DefaultCompleter,
-    ListCompletionHandler, Span,
+    CircularCompletionHandler, CmdCompletionHandler, Completer, CompletionActionHandler,
+    DefaultCompleter, ListCompletionHandler, Span,
 };
 
 mod hinter;

@@ -1,4 +1,6 @@
-use reedline::{EditMode, Emacs, ListCompletionHandler, Vi};
+use std::process::Command;
+
+use reedline::{CmdCompletionHandler, EditMode, Emacs, ListCompletionHandler, Vi};
 
 use {
     crossterm::{
@@ -54,18 +56,22 @@ fn main() -> Result<()> {
         Box::new(Emacs::new(keybindings))
     };
 
+    let cmd = Command::new("fzf");
+
     let mut line_editor = Reedline::create()?
         .with_history(history)?
         .with_edit_mode(edit_mode)
         .with_highlighter(Box::new(DefaultHighlighter::new(commands)))
         .with_completion_action_handler(Box::new(
-            ListCompletionHandler::default().with_completer(completer.clone()),
+            CmdCompletionHandler::default()
+                .with_completer(completer.clone())
+                .with_command(cmd),
         ))
         .with_hinter(Box::new(
             DefaultHinter::default()
                 .with_completer(completer) // or .with_history()
                 // .with_inside_line()
-                .with_style(Style::new().italic().fg(Color::LightGray)),
+                .with_style(Style::new().italic().dimmed().fg(Color::LightGray)),
         ));
 
     let prompt = DefaultPrompt::new(1);
